@@ -1,0 +1,52 @@
+using UnityEngine;
+
+public class SpawnBallsControl : MonoBehaviour
+{
+    [SerializeField] private Material[] arrMaterials;
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private GameObject snowPrefab;
+
+    private GameObject ball1 = null, ball2 = null, ball3 = null;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void SetParams()
+    {
+
+    }
+
+    public void SpawnBall(int numColor, int typeBall = 1)
+    {
+        ball1 = ball2; ball2 = ball3;
+        Vector3 pos = transform.position;
+        pos.z = -0.2f;
+
+        if (typeBall == 1)
+        {
+            ball3 = Instantiate(ballPrefab, pos, Quaternion.identity);
+            ball3.GetComponent<BallColor>().SetParams(numColor + 1, arrMaterials[numColor]);
+        }
+        else if (typeBall == 2)
+        {
+            ball3 = Instantiate(bombPrefab, pos, Quaternion.identity);
+        }
+        else if (typeBall == 3)
+        {
+            ball3 = Instantiate(snowPrefab, pos, Quaternion.identity);
+        }
+        ball3.GetComponent<BallMovement>().SetParams(typeBall);
+        if (ball2 != null) { pos.x -= 0.9f; pos.z = -0.3f; ball2.transform.position = pos; }
+        if (ball1 != null) { pos.x -= 1f; pos.z = -0.7f; ball1.transform.position = pos; }
+    }
+}
