@@ -3,13 +3,15 @@ using UnityEngine;
 public class LevelControl : MonoBehaviour
 {
     [SerializeField] private SpawnBallsControl spawnBallsControl;
+    [SerializeField] private SpawnTails spawnTails;
 
     private bool isPause = true;
     private int _countBalls = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        BeginGame();         
+        BeginGame(); 
+        spawnTails.SetLevelControl(this);
     }
 
     // Update is called once per frame
@@ -25,15 +27,26 @@ public class LevelControl : MonoBehaviour
 
     private void BeginGame()
     {
-        SpawnBall();
-        SpawnBall();
-        SpawnBall();
+        SpawnBall(new Vector3(-1f, -1f, -1f));
+        SpawnBall(new Vector3(-1f, -1f, -1f));
+        SpawnBall(new Vector3(-1f, -1f, -1f));
+        SpawnTail();
     }
 
-    private void SpawnBall()
+    private void SpawnBall(Vector3 target)
     {
         _countBalls++;
         int numColor = Random.Range(0, 4);
-        spawnBallsControl.SpawnBall(numColor);  
+        spawnBallsControl.SpawnBall(numColor, target);  
+    }
+
+    private void SpawnTail()
+    {
+        spawnTails.SpawnTail(4, 0, 1);
+    }
+
+    public void TranslateTarget(Vector3 pos)
+    {
+        SpawnBall(pos);
     }
 }

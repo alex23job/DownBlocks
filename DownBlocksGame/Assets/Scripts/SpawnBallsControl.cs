@@ -26,8 +26,12 @@ public class SpawnBallsControl : MonoBehaviour
 
     }
 
-    public void SpawnBall(int numColor, int typeBall = 1)
+    public void SpawnBall(int numColor, Vector3 target, int typeBall = 1)
     {
+        if (ball1 != null && target != new Vector3(-1f, -1f, -1f)) 
+        { 
+            ball1.GetComponent<BallMovement>().SetTarget(target);
+        }
         ball1 = ball2; ball2 = ball3;
         Vector3 pos = transform.position;
         pos.z = -0.2f;
