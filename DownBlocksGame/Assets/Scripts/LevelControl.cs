@@ -49,4 +49,14 @@ public class LevelControl : MonoBehaviour
     {
         SpawnBall(pos);
     }
+
+    public void ErrorBall(GameObject errBall)
+    {
+        Destroy(errBall);
+    }
+
+    public void DestroyTail(GameObject tail)
+    {
+        Destroy(tail);
+    }
 }

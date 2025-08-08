@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8337203749021997850}
   - component: {fileID: 2580656299670003644}
   - component: {fileID: 2593187263241822077}
+  - component: {fileID: 4643294927971854492}
+  - component: {fileID: 5259681291671868375}
   m_Layer: 0
   m_Name: TailFive
   m_TagString: Untagged
@@ -125,3 +127,51 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.049999997, y: 0.009999998, z: 0.0019999996}
   m_Center: {x: -0.02, y: 0, z: 0}
+--- !u!65 &4643294927971854492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308352658027730700}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.049999997, y: 0.0055982433, z: 0.004478758}
+  m_Center: {x: -0.02, y: 0, z: 0.001239379}
+--- !u!54 &5259681291671868375
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308352658027730700}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

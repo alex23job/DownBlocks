@@ -8,7 +8,7 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 _target;
     private bool _isMoving = false;
-    private float _speed = 15f;
+    private float _speed = 20f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,5 +36,10 @@ public class BallMovement : MonoBehaviour
     {
         _target = tg;
         _isMoving = true;
+    }
+
+    public void StopMovement()
+    {
+        _isMoving = false; 
     }
 }

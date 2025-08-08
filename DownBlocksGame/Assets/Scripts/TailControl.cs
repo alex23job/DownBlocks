@@ -35,8 +35,66 @@ public class TailControl : MonoBehaviour
             //print("OnMouseUp 2");
             if (Input.GetMouseButtonUp(0) == true)
             {
-                //print("OnMouseUp 3");
-                levelControl.TranslateTarget(transform.position);
+                Vector3 pos = transform.position;
+                pos.z = -1;
+                for (int i = 0; i < typeTail; i++)
+                {
+                    if (znCol[i] == 0)
+                    {
+                        pos.x = -1 * i;
+                        break;
+                    }
+                }
+                levelControl.TranslateTarget(pos);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //print(other.name);
+        if (other.CompareTag("ball"))
+        {            
+            int i, col = other.gameObject.GetComponent<BallColor>().NumColor;
+            print($"ball col={col}");
+            if (znCol[0] == 0)
+            {
+                znCol[0] = col;
+                other.transform.parent = transform;
+                other.transform.localPosition = Vector3.zero;
+                other.gameObject.GetComponent<BallMovement>().StopMovement();
+            }
+            else
+            {
+                if (znCol[0] == col)
+                {
+                    for (i = 1; i < typeTail; i++)
+                    {
+                        if (znCol[i] == 0)
+                        {
+                            znCol[i] = col;
+                            other.transform.parent = transform;
+                            Vector3 pos = Vector3.zero;
+                            pos.x = i * -0.01f;
+                            other.transform.localPosition = pos;
+                            other.gameObject.GetComponent<BallMovement>().StopMovement();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    levelControl.ErrorBall(other.gameObject);
+                }
+            }
+            bool isFull = true;
+            for (i = 0; i < typeTail; i++)
+            {
+                if (znCol[i] == 0) { isFull = false; break; }
+            }
+            if (isFull)
+            {
+                levelControl.DestroyTail(gameObject);
             }
         }
     }
