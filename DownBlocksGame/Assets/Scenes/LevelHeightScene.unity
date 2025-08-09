@@ -402,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 751940123}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.5, z: -0.5}
+  m_LocalPosition: {x: 0.5, y: 7.5, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -492,7 +492,7 @@ MonoBehaviour:
   - {fileID: 7824610266694700231, guid: 635830a6a7e95d340a633213834dd2da, type: 3}
   - {fileID: 1589627520678198021, guid: fd523f072a8f3e446893d62eecc05431, type: 3}
   - {fileID: 7308352658027730700, guid: e722b09900d4331499316b5a628856f7, type: 3}
-  pointSpawn1: {x: 0, y: 7.5, z: -0.5}
+  pointSpawn1: {x: 0.5, y: 7.5, z: -0.5}
   pointSpawn2: {x: 0, y: 0, z: 0}
   levelControl: {fileID: 2070714641}
 --- !u!4 &999363206

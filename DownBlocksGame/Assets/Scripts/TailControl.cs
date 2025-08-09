@@ -34,14 +34,15 @@ public class TailControl : MonoBehaviour
         {
             //print("OnMouseUp 2");
             if (Input.GetMouseButtonUp(0) == true)
-            {
+            {                
                 Vector3 pos = transform.position;
+                //print($"OnMouseUp tail={gameObject.name} pos={pos}");
                 pos.z = -1;
                 for (int i = 0; i < typeTail; i++)
                 {
                     if (znCol[i] == 0)
                     {
-                        pos.x = -1 * i;
+                        pos.x += -1 * i;
                         break;
                     }
                 }
@@ -54,9 +55,10 @@ public class TailControl : MonoBehaviour
     {
         //print(other.name);
         if (other.CompareTag("ball"))
-        {            
+        {
+            other.gameObject.tag = "Untagged";
             int i, col = other.gameObject.GetComponent<BallColor>().NumColor;
-            print($"ball col={col}");
+            //print($"ball col={col}");
             if (znCol[0] == 0)
             {
                 znCol[0] = col;

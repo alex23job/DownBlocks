@@ -25,7 +25,7 @@ public class SpawnTails : MonoBehaviour
         if (numTail >= 0 && numTail < arrTails.Length)
         {
             Vector3 pos = (numPoint == 1) ? pointSpawn1 : pointSpawn2;
-            pos.x -= offsetX;
+            pos.x += offsetX;
             tail = Instantiate(arrTails[numTail], pos, Quaternion.Euler(180f, 0, 0));
             tail.GetComponent<TailControl>().SetParams(numTail + 1, levelControl);
         }
