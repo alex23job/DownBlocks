@@ -24,6 +24,12 @@ public class BallMovement : MonoBehaviour
             Vector3 delta = transform.position - _target;
             Vector3 movement = delta.normalized * _speed * Time.deltaTime;
             transform.position -= movement;
+            if (delta.magnitude < 0.1f)
+            {
+                transform.position = _target;
+                _isMoving = false;
+                if (transform.parent == null) Destroy(gameObject);
+            }
         }
     }
 
