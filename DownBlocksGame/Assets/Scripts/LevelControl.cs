@@ -5,6 +5,7 @@ using System.Text;
 
 public class LevelControl : MonoBehaviour
 {
+    [SerializeField] private UI_Control ui_Control;
     [SerializeField] private SpawnBallsControl spawnBallsControl;
     [SerializeField] private SpawnTails spawnTails;
 
@@ -95,9 +96,9 @@ public class LevelControl : MonoBehaviour
 
             if (freeCells.Count > 0)
             {   
-                StringBuilder sb = new StringBuilder();
+                /*StringBuilder sb = new StringBuilder();
                 for (int j = 0; j < freeCells.Count; j++)  { sb.Append($"{j}) {freeCells[j]}  "); }
-                print(sb.ToString());
+                print(sb.ToString());*/
 
                 if (freeCells[0].len == 10)
                 {
@@ -123,7 +124,7 @@ public class LevelControl : MonoBehaviour
 
     private void ShiftTails()
     {
-        int i;
+        int i, cntLoss = 0;
         for (i = 0; i < 150; i++)
         {
             _arrCell[i] = _arrCell[i + 10];
@@ -135,6 +136,15 @@ public class LevelControl : MonoBehaviour
             pos = _listTails[i].transform.position;
             pos.y -= 1f;
             _listTails[i].transform.position = pos;
+        }
+        for (i = 0; i < 10; i++)
+        {
+            if (_arrCell[i] > 0) cntLoss++;
+        }
+        if ( cntLoss > 0 )
+        {   //  поражение
+            isPause = true;
+            ui_Control.ViewLossPanel();
         }
     }
 
@@ -155,7 +165,7 @@ public class LevelControl : MonoBehaviour
         int numTail = tail.GetComponent<TailControl>().TypeTail;
         int x = Mathf.RoundToInt(pos.x - 0.5f);
         int y = Mathf.RoundToInt(7.5f - pos.y);
-        print($"pos={pos} numTail={numTail} x={x}");
+        //print($"pos={pos} numTail={numTail} x={x}");
         for (int i = 0; i < numTail; i++)
         {
             _arrCell[159 + (x - 4) - i - 10 * y] = 0;
