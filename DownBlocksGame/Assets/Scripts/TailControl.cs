@@ -10,7 +10,7 @@ public class TailControl : MonoBehaviour
     private int[] znCol = new int[5] { 0, 0, 0, 0, 0};
     private bool isMoving = false;
     private float speed = 2f;
-    private float timer = 3f;
+    private float timer = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -11,6 +11,7 @@ public class LevelControl : MonoBehaviour
     [SerializeField] private ParticleSystem effectBum;
 
     private bool isPause = true;
+    private bool isBonus = true;
     private int _countBalls = 0;
     private int[] _arrCell;
     private List<GameObject> _listTails = new List<GameObject>();
@@ -65,7 +66,15 @@ public class LevelControl : MonoBehaviour
     {
         _countBalls++;
         int numColor = Random.Range(0, 4);
-        spawnBallsControl.SpawnBall(numColor, target);
+        int rndBonus = Random.Range(5, 10);
+        if (isBonus && _countBalls == rndBonus)
+        {
+            int typeBonus = Random.Range(2, 4);
+            print($"rndBonus={rndBonus}  typeBonus={typeBonus}");
+            spawnBallsControl.SpawnBall(numColor, target, typeBonus);
+            isBonus = false;
+        }
+        else spawnBallsControl.SpawnBall(numColor, target);
         SpawnTail();
     }
 
@@ -82,6 +91,7 @@ public class LevelControl : MonoBehaviour
             _countBalls %= 10;
             if (_countBalls == 0)
             {
+                isBonus = true;
                 ShiftTails();
             }
             List<FreeCell> freeCells = new List<FreeCell>();

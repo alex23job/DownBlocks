@@ -43,14 +43,36 @@ public class SpawnBallsControl : MonoBehaviour
         }
         else if (typeBall == 2)
         {
-            ball3 = Instantiate(bombPrefab, pos, Quaternion.identity);
+            ball3 = Instantiate(bombPrefab, pos, Quaternion.Euler(new Vector3(160f, 0, 0)));
+            print("Spawn bomb");
         }
         else if (typeBall == 3)
         {
+            pos.z = -1f;
             ball3 = Instantiate(snowPrefab, pos, Quaternion.identity);
+            ball3.transform.localScale = new Vector3(50f, 50f, 50f);
+            print("Spawn snow");
         }
         ball3.GetComponent<BallMovement>().SetParams(typeBall);
-        if (ball2 != null) { pos.x -= 0.9f; pos.z = -0.3f; ball2.transform.position = pos; }
-        if (ball1 != null) { pos.x -= 1f; pos.z = -1f; ball1.transform.position = pos; }
+        if (ball2 != null)
+        {
+            int tpBall = ball2.GetComponent<BallMovement>().BallType;
+            pos.x -= 0.9f; pos.z = -0.3f; 
+            if (tpBall == 3)
+            {
+                ball2.transform.localScale = new Vector3(70f, 70f, 70f);
+                pos.z = -1f;
+            }
+            ball2.transform.position = pos; 
+        }
+        if (ball1 != null) 
+        {
+            int tpBall = ball1.GetComponent<BallMovement>().BallType;
+            if (tpBall == 3)
+            {
+                ball1.transform.localScale = new Vector3(100f, 100f, 100f);
+            }
+            pos.x -= 1f; pos.z = -1f; ball1.transform.position = pos; 
+        }
     }
 }
