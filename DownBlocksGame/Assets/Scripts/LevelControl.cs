@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
+using static UnityEditor.PlayerSettings;
 
 public class LevelControl : MonoBehaviour
 {
@@ -220,6 +221,42 @@ public class LevelControl : MonoBehaviour
             pos.x -= 1f;
         }
         Destroy(tail);
+    }
+
+    public void ClearThreeLines()
+    {
+        int i, firstLine = 1, ty;
+        for (i = 10; i < _arrCell.Length; i++) 
+        {
+            if (_arrCell[i] != 0)
+            {
+                firstLine = i / 10;
+                break;
+            }
+        }
+        for (i = _listTails.Count; i > 0; i--) 
+        {
+            ty = 15 - Mathf.RoundToInt(7.5f - _listTails[i - 1].transform.position.y);
+            if ((ty >= firstLine) && (ty < (firstLine + 3)))
+            {
+                GameObject tail = _listTails[i - 1];
+                _listTails.RemoveAt(i - 1);
+                Vector3 pos = tail.transform.position;
+                int numTail = tail.GetComponent<TailControl>().TypeTail;
+                int x = Mathf.RoundToInt(pos.x - 0.5f); 
+                int y = Mathf.RoundToInt(7.5f - pos.y);
+                ParticleSystem effect;
+                Quaternion qw = Quaternion.Euler(180f, 0, 0);
+                for (int j = 0; j < numTail; j++)
+                {
+                    _arrCell[159 + (x - 4) - j - 10 * y] = 0;
+                    effect = Instantiate(effectBum, pos, qw);
+                    Destroy(effect.gameObject, 1f);
+                    pos.x -= 1f;
+                }
+                Destroy(tail);
+            }
+        }
     }
 
     public void ClearMovingTail()
