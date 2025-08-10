@@ -13,6 +13,7 @@ public class LevelControl : MonoBehaviour
 
     private bool isPause = true;
     private bool isBonus = true;
+    private int _countSnow = 0;
     private int _countBalls = 0;
     private int[] _arrCell;
     private List<GameObject> _listTails = new List<GameObject>();
@@ -156,6 +157,11 @@ public class LevelControl : MonoBehaviour
 
     private void ShiftTails()
     {
+        if (_countSnow > 0)
+        {
+            _countSnow--;
+            return;
+        }
         int i, cntLoss = 0;
         for (i = 0; i < 150; i++)
         {
@@ -266,7 +272,7 @@ public class LevelControl : MonoBehaviour
 
     public void SnowShift(GameObject tail)
     {
-
+        _countSnow = 1;
     }
 }
 
