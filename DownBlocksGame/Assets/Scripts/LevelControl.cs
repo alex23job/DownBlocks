@@ -8,15 +8,17 @@ public class LevelControl : MonoBehaviour
     [SerializeField] private UI_Control ui_Control;
     [SerializeField] private SpawnBallsControl spawnBallsControl;
     [SerializeField] private SpawnTails spawnTails;
+    [SerializeField] private ParticleSystem effectBum;
 
     private bool isPause = true;
     private int _countBalls = 0;
     private int[] _arrCell;
     private List<GameObject> _listTails = new List<GameObject>();
     private int[] reOfs = new int[10] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4};
-    private float _speedTails = 2f;
+    private float _speedTails = 1f;
     private GameObject _movingTail = null;
     private int _score = 0;
+    private int _blocks = 0;
     private float timer = 2f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -180,28 +182,44 @@ public class LevelControl : MonoBehaviour
 
     public void DestroyTail(GameObject tail, int mult = 1)
     {
-        _score += mult * tail.GetComponent<TailControl>().TypeTail;
+        int i, typeTail = tail.GetComponent<TailControl>().TypeTail;
+        _score += mult * typeTail;
         ui_Control.ViewScore(_score);
+        _blocks++;
+        ui_Control.ViewBlocks(_blocks);
         if (mult == 2)
         {
-            SpawnMovingTail();
+            if (_movingTail == null) SpawnMovingTail();
         }
         Vector3 pos = tail.transform.position;
         int numTail = tail.GetComponent<TailControl>().TypeTail;
         int x = Mathf.RoundToInt(pos.x - 0.5f);
         int y = Mathf.RoundToInt(7.5f - pos.y);
         //print($"pos={pos} numTail={numTail} x={x}");
-        for (int i = 0; i < numTail; i++)
+        for (i = 0; i < numTail; i++)
         {
             _arrCell[159 + (x - 4) - i - 10 * y] = 0;
         }
         if (_listTails.Contains(tail)) _listTails.Remove(tail);
+        ParticleSystem effect;
+        Quaternion qw = Quaternion.Euler(180f, 0, 0);
+        for(i = 0; i < typeTail; i++)
+        {
+            effect = Instantiate(effectBum, pos, qw);
+            Destroy(effect.gameObject, 1f);
+            pos.x -= 1f;
+        }
         Destroy(tail);
     }
 
     public void ClearMovingTail()
     {
         _movingTail = null;
+    }
+
+    public void SnowShift(GameObject tail)
+    {
+
     }
 }
 

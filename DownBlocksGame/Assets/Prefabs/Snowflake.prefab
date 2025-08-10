@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7944647918016515754}
   m_Layer: 0
   m_Name: Snowflake
-  m_TagString: Untagged
+  m_TagString: snow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

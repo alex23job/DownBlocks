@@ -6,10 +6,13 @@ public class UI_Control : MonoBehaviour
 {
     [SerializeField] private GameObject panelLoss;
     [SerializeField] private Text txtScore;
+    [SerializeField] private Text txtBlock;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ViewScore(0);
+        ViewBlocks(0);
     }
 
     // Update is called once per frame
@@ -32,5 +35,10 @@ public class UI_Control : MonoBehaviour
     public void ViewScore(int score)
     {
         txtScore.text = score.ToString();
+    }
+
+    public void ViewBlocks(int block)
+    {
+        txtBlock.text = block.ToString();
     }
 }

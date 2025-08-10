@@ -51,6 +51,6 @@ public class SpawnBallsControl : MonoBehaviour
         }
         ball3.GetComponent<BallMovement>().SetParams(typeBall);
         if (ball2 != null) { pos.x -= 0.9f; pos.z = -0.3f; ball2.transform.position = pos; }
-        if (ball1 != null) { pos.x -= 1f; pos.z = -0.7f; ball1.transform.position = pos; }
+        if (ball1 != null) { pos.x -= 1f; pos.z = -1f; ball1.transform.position = pos; }
     }
 }
