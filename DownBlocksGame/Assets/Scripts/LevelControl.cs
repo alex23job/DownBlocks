@@ -14,6 +14,10 @@ public class LevelControl : MonoBehaviour
     private int[] _arrCell;
     private List<GameObject> _listTails = new List<GameObject>();
     private int[] reOfs = new int[10] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4};
+    private float _speedTails = 2f;
+    private GameObject _movingTail = null;
+    private int _score = 0;
+    private float timer = 2f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,7 +29,15 @@ public class LevelControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isPause == false)
+        {
+            if (timer > 0) timer -= Time.deltaTime;
+            else
+            {
+                timer = 2f;
+                if (_movingTail == null) SpawnMovingTail();
+            }
+        }
     }
 
     public void SetPause(bool pause)
@@ -35,6 +47,7 @@ public class LevelControl : MonoBehaviour
 
     private void BeginGame()
     {
+        SetPause(false);
         _arrCell = new int[160];
         for (int i = 0; i < 160; i++)
         {
@@ -54,6 +67,12 @@ public class LevelControl : MonoBehaviour
         SpawnTail();
     }
 
+    private void SpawnMovingTail() 
+    {
+        int num = Random.Range(0, 2);
+        int ofs = Random.Range(1, 9);
+        _movingTail = spawnTails.SpawnMovingTail(num, reOfs[ofs], 1, _speedTails);
+    }
     private void SpawnTail()
     {
         if (_countBalls > 0)
@@ -159,8 +178,14 @@ public class LevelControl : MonoBehaviour
         Destroy(errBall);
     }
 
-    public void DestroyTail(GameObject tail)
+    public void DestroyTail(GameObject tail, int mult = 1)
     {
+        _score += mult * tail.GetComponent<TailControl>().TypeTail;
+        ui_Control.ViewScore(_score);
+        if (mult == 2)
+        {
+            SpawnMovingTail();
+        }
         Vector3 pos = tail.transform.position;
         int numTail = tail.GetComponent<TailControl>().TypeTail;
         int x = Mathf.RoundToInt(pos.x - 0.5f);
@@ -172,6 +197,11 @@ public class LevelControl : MonoBehaviour
         }
         if (_listTails.Contains(tail)) _listTails.Remove(tail);
         Destroy(tail);
+    }
+
+    public void ClearMovingTail()
+    {
+        _movingTail = null;
     }
 }
 

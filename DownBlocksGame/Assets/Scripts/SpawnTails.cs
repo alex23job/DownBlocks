@@ -19,6 +19,20 @@ public class SpawnTails : MonoBehaviour
         
     }
 
+    public GameObject SpawnMovingTail(int numTail, int offsetX, int numPoint, float speed)
+    {
+        GameObject tail = null;
+        if (numTail >= 0 && numTail < arrTails.Length)
+        {
+            Vector3 pos = (numPoint == 1) ? pointSpawn1 : pointSpawn2;
+            pos.x += offsetX;
+            pos.z -= 1f;
+            tail = Instantiate(arrTails[numTail], pos, Quaternion.Euler(180f, 0, 0));
+            tail.GetComponent<TailControl>().SetParams(numTail + 1, levelControl, true, speed);
+        }
+        return tail;
+    }
+
     public GameObject SpawnTail(int numTail, int offsetX, int numPoint)
     {
         GameObject tail = null;

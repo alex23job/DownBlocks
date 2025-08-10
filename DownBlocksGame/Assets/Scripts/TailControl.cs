@@ -8,6 +8,8 @@ public class TailControl : MonoBehaviour
     public int TypeTail {  get { return typeTail; } }
 
     private int[] znCol = new int[5] { 0, 0, 0, 0, 0};
+    private bool isMoving = false;
+    private float speed = 2f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,11 +20,26 @@ public class TailControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isMoving)
+        {
+            Vector3 pos = transform.position;
+            if (pos.y < -9f)
+            {
+                Destroy(gameObject);
+                levelControl.ClearMovingTail();
+            }
+            else
+            {
+                pos.y -= Time.deltaTime * speed;
+                transform.position = pos;
+            }
+        }
     }
 
-    public void SetParams(int tailType, LevelControl lc)
+    public void SetParams(int tailType, LevelControl lc, bool mode = false, float sp = 2f)
     {
+        isMoving = mode;
+        speed = sp;
         typeTail = tailType;
         levelControl = lc;
     }
@@ -36,8 +53,8 @@ public class TailControl : MonoBehaviour
             if (Input.GetMouseButtonUp(0) == true)
             {                
                 Vector3 pos = transform.position;
-                //print($"OnMouseUp tail={gameObject.name} pos={pos}");
-                pos.z = -1;
+                //print($"OnMouseUp tail={gameObject.name} pos={pos} isMoving={isMoving}");
+                pos.z = (isMoving) ? -2 : -1;
                 for (int i = 0; i < typeTail; i++)
                 {
                     if (znCol[i] == 0)
@@ -96,7 +113,9 @@ public class TailControl : MonoBehaviour
             }
             if (isFull)
             {
-                levelControl.DestroyTail(gameObject);
+                int mult = 1;
+                if (isMoving) mult = 2;
+                levelControl.DestroyTail(gameObject, mult);
             }
         }
     }
