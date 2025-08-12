@@ -48,6 +48,7 @@ public class TailControl : MonoBehaviour
         speed = sp;
         typeTail = tailType;
         levelControl = lc;
+        if (mode) print($"Tail SetParams type={tailType} mode={mode} speed={speed}");
     }
 
     private void OnMouseUp()

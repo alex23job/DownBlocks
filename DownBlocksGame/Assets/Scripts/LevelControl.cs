@@ -13,6 +13,8 @@ public class LevelControl : MonoBehaviour
 
     private bool isPause = true;
     private bool isBonus = true;
+    private int _countLive = 3;
+    private int _currentLive = 100;
     private int _countSnow = 0;
     private int _countBalls = 0;
     private int[] _arrCell;
@@ -82,9 +84,12 @@ public class LevelControl : MonoBehaviour
 
     private void SpawnMovingTail() 
     {
-        int num = Random.Range(0, 2);
+        int num = Random.Range(0, 3);
         int ofs = Random.Range(1, 9);
-        _movingTail = spawnTails.SpawnMovingTail(num, reOfs[ofs], 1, _speedTails);
+        float currentSpeed = _speedTails;
+        if (num == 0) currentSpeed *= 1.5f;
+        if (num == 2) currentSpeed *= 0.5f;
+        _movingTail = spawnTails.SpawnMovingTail(num, reOfs[ofs], 1, currentSpeed);
     }
     private void SpawnTail()
     {
@@ -194,7 +199,33 @@ public class LevelControl : MonoBehaviour
 
     public void ErrorBall(GameObject errBall)
     {
+        ChangeLive(1);
         Destroy(errBall);
+    }
+
+    private void ChangeLive(int zn)
+    {
+        int delta = _currentLive - zn;
+        if (delta > 0)
+        {
+            _currentLive = delta;
+        }
+        else
+        {
+            _currentLive = 100 - (zn - _currentLive);
+            if (_countLive > 0)
+            {
+                _countLive--;
+                ui_Control.ViewLive(_countLive);
+            }
+            else
+            {
+                ui_Control.ViewLive(_currentLive);
+                isPause = true;
+                ui_Control.ViewLossPanel();
+            }
+        }
+        ui_Control.ViewCurrentLive(_currentLive);
     }
 
     public void DestroyTail(GameObject tail, int mult = 1)
@@ -267,6 +298,7 @@ public class LevelControl : MonoBehaviour
 
     public void ClearMovingTail()
     {
+        ChangeLive(10);
         _movingTail = null;
     }
 
