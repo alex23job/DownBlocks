@@ -68,10 +68,16 @@ public class LevelControl : MonoBehaviour
 
     private void SpawnBall(Vector3 target)
     {
+        if (_countBalls >= 1000)
+        {   //  end game
+            SetPause(true);
+            ui_Control.ViewWinPanel();
+        }
         _countBalls++;
+        ui_Control.ViewBalls(_countBalls);
         int numColor = Random.Range(0, 4);
         int rndBonus = Random.Range(5, 10);
-        if (isBonus && _countBalls == rndBonus)
+        if (isBonus && ((_countBalls % 10) == rndBonus))
         {
             int typeBonus = Random.Range(2, 4);
             print($"rndBonus={rndBonus}  typeBonus={typeBonus}");
@@ -95,8 +101,8 @@ public class LevelControl : MonoBehaviour
     {
         if (_countBalls > 0)
         {
-            _countBalls %= 10;
-            if (_countBalls == 0)
+            //_countBalls %= 10;
+            if ((_countBalls % 10) == 0)
             {
                 isBonus = true;
                 ShiftTails();
