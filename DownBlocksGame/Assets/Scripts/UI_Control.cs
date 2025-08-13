@@ -32,6 +32,11 @@ public class UI_Control : MonoBehaviour
         
     }
 
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
     public void ViewWinPanel()
     {
         panelWin.SetActive(true);
@@ -65,15 +70,15 @@ public class UI_Control : MonoBehaviour
         txtLevel.text = $"{levStr} : {level}";
     } 
 
-    public void ViewCurrentLive(int zn)
+    public void ViewCurrentLive(int zn, float maxCount = 100.0f)
     {   
-        curLive.fillAmount = zn / 100.0f;
+        curLive.fillAmount = zn / maxCount;
         txtCurLive.text = zn.ToString();
     }
 
-    public void ViewBalls(int zn)
+    public void ViewBalls(int zn, float maxBalls = 1000.0f)
     {       
-        curBalls.fillAmount = zn / 1000.0f;
+        curBalls.fillAmount = zn / maxBalls;
         string lang = "ru";
         string balls = (lang == "ru") ? "Шары" : "Balls";
         txtBalls.text = $"{balls} : {zn}";

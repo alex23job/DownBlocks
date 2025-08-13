@@ -26,9 +26,13 @@ public class LevelControl : MonoBehaviour
     private int _blocks = 0;
     private float timer = 2f;
 
+    private List<LevelInfo> _levels = new List<LevelInfo>();
+    private LevelInfo _currentLevel = new LevelInfo(1, 4, 100, 10, 1);
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        CreateLevels();
         BeginGame(); 
         spawnTails.SetLevelControl(this);
     }
@@ -47,6 +51,31 @@ public class LevelControl : MonoBehaviour
         }
     }
 
+    private void CreateLevels()
+    {
+        _levels.Clear();
+        _levels.Add(new LevelInfo(1, 4, 100, 20, 1));
+        _levels.Add(new LevelInfo(2, 4, 100, 15, 2));
+        _levels.Add(new LevelInfo(3, 4, 200, 30, 2));
+        _levels.Add(new LevelInfo(4, 5, 200, 20, 2));
+        _levels.Add(new LevelInfo(5, 5, 200, 20, 3));
+        _levels.Add(new LevelInfo(6, 5, 300, 30, 3));
+        _levels.Add(new LevelInfo(7, 6, 300, 30, 3));
+        _levels.Add(new LevelInfo(8, 6, 400, 40, 3));
+        _levels.Add(new LevelInfo(9, 6, 500, 50, 3));
+        _levels.Add(new LevelInfo(10, 7, 500, 50, 3));
+        _levels.Add(new LevelInfo(11, 7, 600, 60, 3));
+        _levels.Add(new LevelInfo(12, 7, 700, 70, 3));
+        _levels.Add(new LevelInfo(13, 8, 700, 70, 3));
+        _levels.Add(new LevelInfo(14, 8, 800, 80, 3));
+        _levels.Add(new LevelInfo(15, 8, 900, 80, 3));
+        _levels.Add(new LevelInfo(16, 8, 900, 70, 3));
+        _levels.Add(new LevelInfo(17, 8, 1000, 70, 3));
+        _levels.Add(new LevelInfo(18, 8, 1000, 60, 3));
+        _levels.Add(new LevelInfo(19, 8, 1000, 50, 3));
+        _levels.Add(new LevelInfo(20, 8, 1000, 40, 3));
+    }
+
     public void SetPause(bool pause)
     {
         isPause = pause;
@@ -55,6 +84,18 @@ public class LevelControl : MonoBehaviour
     private void BeginGame()
     {
         SetPause(false);
+        int gmLevel = GameManager.Instance.currentPlayer.currentLevel;
+        for (int j = 0; j < _levels.Count; j++)
+        {
+            if (_levels[j].Level == gmLevel)
+            {
+                _currentLevel = _levels[j];
+                break;
+            }
+        }
+        ui_Control.ViewLevel(_currentLevel.Level);
+        _currentLive = _currentLevel.CountBallsInAtempt;
+        ui_Control.ViewCurrentLive(_currentLevel.CountBallsInAtempt, (float)_currentLevel.CountBallsInAtempt);
         _arrCell = new int[160];
         for (int i = 0; i < 160; i++)
         {
@@ -68,14 +109,15 @@ public class LevelControl : MonoBehaviour
 
     private void SpawnBall(Vector3 target)
     {
-        if (_countBalls >= 1000)
+        if (_countBalls >= _currentLevel.CountBalls)
         {   //  end game
             SetPause(true);
             ui_Control.ViewWinPanel();
+            GameManager.Instance.currentPlayer.LevelComplete();
         }
         _countBalls++;
-        ui_Control.ViewBalls(_countBalls);
-        int numColor = Random.Range(0, 4);
+        ui_Control.ViewBalls(_countBalls, (float)_currentLevel.CountBalls);
+        int numColor = Random.Range(0, _currentLevel.MaxCountColors);
         int rndBonus = Random.Range(5, 10);
         if (isBonus && ((_countBalls % 10) == rndBonus))
         {
@@ -90,9 +132,10 @@ public class LevelControl : MonoBehaviour
 
     private void SpawnMovingTail() 
     {
-        int num = Random.Range(0, 3);
+        int num = Random.Range(0, _currentLevel.MaxMovingTail);
         int ofs = Random.Range(1, 9);
-        float currentSpeed = _speedTails;
+        if (num == 2) ofs = Random.Range(2, 8);
+        float currentSpeed = _speedTails + (0.1f * (_currentLevel.Level - 1));
         if (num == 0) currentSpeed *= 1.5f;
         if (num == 2) currentSpeed *= 0.5f;
         _movingTail = spawnTails.SpawnMovingTail(num, reOfs[ofs], 1, currentSpeed);
@@ -158,7 +201,7 @@ public class LevelControl : MonoBehaviour
                     if (maxLen > 4) maxLen = 5;
                     int numTail = Random.Range(minLen, maxLen);
                     int ofs = reOfs[freeCells[num].ofs];
-                    print($"num={num} maxLen={maxLen} numTail={numTail} tmpofs={freeCells[num].ofs} reOfs={ofs}");
+                    //print($"num={num} maxLen={maxLen} numTail={numTail} tmpofs={freeCells[num].ofs} reOfs={ofs}");
                     _listTails.Add(spawnTails.SpawnTail(numTail, ofs, 1));
                     for (int i = 0; i < numTail + 1; i++) _arrCell[(155 + ofs) - i] = 1;
                 }
@@ -218,7 +261,7 @@ public class LevelControl : MonoBehaviour
         }
         else
         {
-            _currentLive = 100 - (zn - _currentLive);
+            _currentLive = _currentLevel.CountBallsInAtempt - (zn - _currentLive);
             if (_countLive > 0)
             {
                 _countLive--;
@@ -226,12 +269,13 @@ public class LevelControl : MonoBehaviour
             }
             else
             {
-                ui_Control.ViewLive(_currentLive);
+                ui_Control.ViewLive(_countLive);
+                ui_Control.ViewCurrentLive(_currentLive, _currentLevel.CountBallsInAtempt);
                 isPause = true;
                 ui_Control.ViewLossPanel();
             }
         }
-        ui_Control.ViewCurrentLive(_currentLive);
+        ui_Control.ViewCurrentLive(_currentLive, _currentLevel.CountBallsInAtempt);
     }
 
     public void DestroyTail(GameObject tail, int mult = 1)
@@ -239,6 +283,7 @@ public class LevelControl : MonoBehaviour
         int i, typeTail = tail.GetComponent<TailControl>().TypeTail;
         _score += mult * typeTail;
         ui_Control.ViewScore(_score);
+        GameManager.Instance.currentPlayer.currentScore = _score;
         _blocks++;
         ui_Control.ViewBlocks(_blocks);
         if (mult == 2)
@@ -328,5 +373,31 @@ public struct FreeCell
     public override string ToString()
     {
         return $"<len={len}, ofs={ofs}>";
+    }
+}
+
+public class LevelInfo
+{
+    private int level;
+    private int maxCountColors;
+    private int countBalls;
+    private int countBallsInAtempt;
+    private int maxMovingTail;
+
+    public int Level { get { return level; } }
+    public int CountBalls { get { return countBalls; } }
+    public int CountBallsInAtempt { get { return countBallsInAtempt; } }
+    public int MaxMovingTail { get { return maxMovingTail; } }
+
+    public int MaxCountColors { get => maxCountColors; }
+
+    public LevelInfo() { }
+    public LevelInfo(int lev, int maxColors, int cntBalls, int cntBinAt, int maxMovTail)
+    {
+        level = lev;
+        maxCountColors = maxColors;
+        countBalls = cntBalls;
+        countBallsInAtempt = cntBinAt;
+        maxMovingTail = maxMovTail;
     }
 }
