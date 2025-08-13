@@ -192,6 +192,7 @@ public class PlayerInfo
             maxLevel = currentLevel;
         }
         sessionScore += currentScore;
+        if (sessionScore > totalScore) totalScore = sessionScore;
     }
 
     /*    public void UpdateReward(int numLevel)

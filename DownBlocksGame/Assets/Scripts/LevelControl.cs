@@ -114,6 +114,7 @@ public class LevelControl : MonoBehaviour
             SetPause(true);
             ui_Control.ViewWinPanel();
             GameManager.Instance.currentPlayer.LevelComplete();
+            GameManager.Instance.SaveGame();
         }
         _countBalls++;
         ui_Control.ViewBalls(_countBalls, (float)_currentLevel.CountBalls);
